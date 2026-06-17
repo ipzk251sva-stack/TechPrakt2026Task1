@@ -7,8 +7,16 @@ function App() {
 
   const addTask = () => {
     if (inputValue.trim() === '') return
-    setTasks([...tasks, { id: Date.now(), text: inputValue }])
+    // Додаємо властивість completed: false для нових завдань
+    setTasks([...tasks, { id: Date.now(), text: inputValue, completed: false }])
     setInputValue('')
+  }
+
+  // Функція для зміни статусу завдання (викреслено/не викреслено)
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task => 
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ))
   }
 
   return (
@@ -22,9 +30,15 @@ function App() {
       />
       <button onClick={addTask}>Додати</button>
       
-      <ul style={{ textAlign: 'left', marginTop: '20px' }}>
+      <ul style={{ textAlign: 'left', marginTop: '20px', cursor: 'pointer' }}>
         {tasks.map((task) => (
-          <li key={task.id}>{task.text}</li>
+          <li 
+            key={task.id} 
+            onClick={() => toggleTask(task.id)}
+            style={{ textDecoration: task.completed ? 'line-through' : 'none' }}
+          >
+            {task.text}
+          </li>
         ))}
       </ul>
     </div>
